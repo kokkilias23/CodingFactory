@@ -20,11 +20,11 @@ public class TernaryApp {
         num1 = scanner.nextInt();
         num2 = scanner.nextInt();
 
-        //  if (num1 < num2) {
-        //     min = num1;
-        // } else {
-        //     min = num2;
-        // }
+      //  if (num1 < num2) {
+       //     min = num1;
+       // } else {
+       //     min = num2;
+       // }
 
         min = (num1 < num2) ? num1 : num2;
         System.out.println("o elaxistos einai " + min);
