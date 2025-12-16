@@ -1,4 +1,4 @@
-package gr.aueb.cf.cf9.ch11;
+package gr.aueb.cf.cf9.ch12;
 
 public class Account {
     private long id;
@@ -91,7 +91,7 @@ public class Account {
         try {
             if (amount < 0 )throw new Exception("The amount must be positive");
             if (amount > balance ) throw new Exception("The balance is insufficient");
-            if (!ssn.equals(this.ssn)) throw new Exception("The SSN does not match");
+            if (!isSsnValid(ssn)) throw new Exception("The SSN does not match");
             balance -= amount;
         }   catch (Exception e) {
 
@@ -113,5 +113,9 @@ public class Account {
     public String accountToString() {
         return "Account Id: " + id + " IBAN: " + iban + " Firstname: " + firstname +
                 "Lastname: " + lastname + " SSN: " + ssn + " Balance: " + balance;
+    }
+
+    private boolean isSsnValid(String ssn) {
+        return this.ssn.equals(ssn);
     }
 }
