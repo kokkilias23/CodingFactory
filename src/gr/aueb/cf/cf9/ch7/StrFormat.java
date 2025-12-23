@@ -11,5 +11,8 @@ public class StrFormat {
 
         String seat = String.format("%c%02d", row, col);
         System.out.println(seat);
+
+        System.out.println(seat.equals(row));
+        System.out.println(seat.hashCode());
     }
 }
