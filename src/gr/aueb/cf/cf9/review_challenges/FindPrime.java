@@ -13,7 +13,8 @@ public class FindPrime {
         int num = 0;
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Δώστε αριθμό:");
+        System.out.println("Δώστε αριθμό,");
+        System.out.println(" Να ανήκει στους πραγματικους αριθμους:");
         num = sc.nextInt();
 
         System.out.printf("Num: %d, is %s", num, (isPrime(num) ? "prime" : "not prime" ));
