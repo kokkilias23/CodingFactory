@@ -1,5 +1,7 @@
 package gr.aueb.cf.cf9.ch18.bankapp.dto;
 
+import java.math.BigDecimal;
+
 // Record το χρησιμοποιείς όταν θες:
 //
 //απλά fields
@@ -8,7 +10,7 @@ package gr.aueb.cf.cf9.ch18.bankapp.dto;
 //
 //λιγότερο boilerplate
 // sugar code για DTO
-public record AccountInsertDTO(String iban, double balance){}
+public record AccountInsertDTO(String iban, BigDecimal balance){}
 
 
 
