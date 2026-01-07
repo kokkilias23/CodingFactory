@@ -14,7 +14,7 @@ public class AccountDAOImpl implements IAccountDAO {
 
     @Override
     public Account saveOrUpdate(Account account) {
-        int index = accounts.indexOf(account);  // equals προυποθεση
+        int index = accounts.indexOf(account);  // override equals προυποθεση
 
         if (index == -1) {              // Αν δεν υπαρχει στην λιστα
             accounts.add(account);      // τοτε κανε insert

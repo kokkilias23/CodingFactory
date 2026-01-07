@@ -14,6 +14,7 @@ public class Mapper {
     }
 
     public static Account mapToModelEntity(AccountInsertDTO dto) {
+
         return new Account(dto.iban(), dto.balance());
     }
 
