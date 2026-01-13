@@ -2,8 +2,6 @@ package gr.aueb.cf.cf9.ch18.bankapp.dao;
 
 import gr.aueb.cf.cf9.ch18.bankapp.model.Account;
 
-import gr.aueb.cf.cf9.review.challenges.ArmstrongArray;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,21 +12,21 @@ public class AccountDAOImpl implements IAccountDAO {
 
     @Override
     public Account saveOrUpdate(Account account) {
-        int index = accounts.indexOf(account);  // override equals προυποθεση
+        int index = accounts.indexOf(account);  // override equals
 
-        if (index == -1) {              // Αν δεν υπαρχει στην λιστα
-            accounts.add(account);      // τοτε κανε insert
+        if (index == -1) {                      // Αν δεν υπάρχει στη λίστα
+            accounts.add(account);              // τότε κάνε insert
             return account;
         }
-        // Αν υπαρχει ηδη το Account
-        accounts.set(index, account);   // update
+
+        // Αν υπάρχει ήδη το Account
+        accounts.set(index, account);           // τότε κάνε update
         return accounts.get(index);
     }
 
     @Override
     public void remove(String iban) {
         accounts.removeIf(account -> account.getIban().equals(iban));
-
     }
 
     @Override
@@ -40,14 +38,10 @@ public class AccountDAOImpl implements IAccountDAO {
 
     @Override
     public List<Account> getAllAccounts() {
+        // return accounts;
         // return new ArrayList<>(accounts);
-        // return Collections.unmodifiableList(accounts); // 3 διαφορετικες εκδοχες για return
-        return List.copyOf(accounts);
-    }
-
-    @Override
-    public long count() {
-        return accounts.size();
+        return Collections.unmodifiableList(accounts);
+        // return List.copyOf(accounts);
     }
 
     @Override
@@ -55,5 +49,8 @@ public class AccountDAOImpl implements IAccountDAO {
         return accounts.stream()
                 .anyMatch(account -> account.getIban().equals(iban));
     }
-}
 
+    public long count() {
+        return accounts.size();
+    }
+}

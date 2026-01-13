@@ -43,7 +43,8 @@ public class Account {
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Account account)) return false;
-        return Objects.equals(this.getIban(), account.getIban());
+        return Objects.equals(this.getIban(), account.getIban());   // null safe
+        //return this.iban.equals(account.iban);  // not null safe
     }
 
     @Override

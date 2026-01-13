@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class AccountServiceImpl implements IAccountService {
     private final IAccountDAO accountDAO;
 
@@ -31,57 +30,59 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public void deposit(AccountDepositDTO depositDTO) throws InsufficientBalanceException, AccountNotFoundException {
+    public void deposit(AccountDepositDTO depositDTO) throws AccountNotFoundException {
         try {
             Account account = accountDAO.findByIban(depositDTO.iban())
-                    .orElseThrow(() -> new AccountNotFoundException("Account with iban" + depositDTO.iban() + "not found"));
-                accountDAO.saveOrUpdate(account);
-                // Logging
-        } catch (AccountNotFoundException e){
-            System.err.printf("%s. The account with iban @s wan not found\n", LocalDateTime.now(), depositDTO.iban());
+                    .orElseThrow(() -> new AccountNotFoundException("Account with iban " + depositDTO.iban() + " not found!"));
+            account.setBalance(account.getBalance().add(depositDTO.amount()));
+            accountDAO.saveOrUpdate(account);
+            // Logging
+        } catch (AccountNotFoundException e) {
+            System.err.printf("%s. The account with iban=%s was not found!\n", LocalDateTime.now(), depositDTO.iban());
             throw e;
         }
     }
 
     @Override
-    public void withrdaw(AccountWithdrawDTO withdrawDTO) throws InsufficientBalanceException, AccountNotFoundException {
-       try {
-           Account account = accountDAO.findByIban(withdrawDTO.iban())
-                   .orElseThrow(() -> new AccountNotFoundException("Account with iban" + withdrawDTO.iban() + "not found"));
+    public void withdraw(AccountWithdrawDTO withdrawDTO) throws InsufficientBalanceException, AccountNotFoundException {
+        try {
+            Account account = accountDAO.findByIban(withdrawDTO.iban())
+                    .orElseThrow(() -> new AccountNotFoundException("Account with iban " + withdrawDTO.iban() + " not found!"));
 
-           if (account.getBalance().compareTo(withdrawDTO.amount()) < 0) {
-               throw new InsufficientBalanceException("Invalid amount " + withdrawDTO.amount() + " for account with iban"
-                       + withdrawDTO.iban() + "was greater than the balance");
-           }
-           account.setBalance(account.getBalance().subtract(withdrawDTO.amount()));
-           accountDAO.saveOrUpdate(account);
-       } catch (AccountNotFoundException e) {
-           System.err.printf("%s. The account with iban @s wan not found\n", LocalDateTime.now(), withdrawDTO.iban());
-           throw e;
-       } catch (InsufficientBalanceException e) {
-           System.err.printf("%s. The account=%f is greater than the abalance of the account with iban=%s. \n"
-                   , LocalDateTime.now(),withdrawDTO.amount(), withdrawDTO.iban());
-           throw e;
-       }
+            if (account.getBalance().compareTo(withdrawDTO.amount()) < 0) {
+                throw new InsufficientBalanceException("Invalid amount " + withdrawDTO.amount() + " for account with iban "
+                        + withdrawDTO.iban() + " was greater than the balance");
+            }
+            account.setBalance(account.getBalance().subtract(withdrawDTO.amount()));
+            accountDAO.saveOrUpdate(account);
+            // Logging
+        } catch (AccountNotFoundException e) {
+            System.err.printf("%s. The account with iban=%s was not found!\n", LocalDateTime.now(), withdrawDTO.iban());
+            throw e;
+        } catch (InsufficientBalanceException e) {
+            System.err.printf("%s. The amount=%f is greater then the balance of the account with iban=%s. \n",
+                    LocalDateTime.now(), withdrawDTO.amount(), withdrawDTO.iban());
+            throw e;
+        }
     }
 
     @Override
     public BigDecimal getBalance(String iban) throws AccountNotFoundException {
         try {
             Account account = accountDAO.findByIban(iban)
-                    .orElseThrow(() -> new AccountNotFoundException("Account with iban" +iban + "not found"));
+                    .orElseThrow(() -> new AccountNotFoundException("Account with iban " + iban + " not found!"));
             return account.getBalance();
         } catch (AccountNotFoundException e) {
             System.err.printf("%s. The account with iban=%s was not found!\n", LocalDateTime.now(), iban);
+//            System.err.flush();
             throw e;
-
         }
     }
 
     @Override
     public List<AccountReadOnlyDTO> getAllAccounts() {
         return accountDAO.getAllAccounts().stream()
-                .map(account -> Mapper.mapToReadOnlyDTO(account)) // .map(Mapper::mapToReadOnlyDTO) ετσι γινετε γιατι εχουμε account apo thn mia kai account apo thn alli
-                .collect(Collectors.toList());
+                .map(Mapper::mapToReadOnlyDTO)
+                .toList();
     }
 }
